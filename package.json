@@ -1,0 +1,16 @@
+{
+  "name": "mysqltomongo",
+  "version": "1.0.0",
+  "description": "Mysql to MongoDB converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Glucoguide Coprporation",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.0.35",
+    "mysql": "^2.7.0",
+    "winston": "^1.0.1"
+  }
+}
