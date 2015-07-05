@@ -1,5 +1,5 @@
 {
-  "name": "mysqltomongo",
+  "name": "mysqltomongodb",
   "version": "1.0.0",
   "description": "Mysql to MongoDB converter",
   "main": "index.js",
