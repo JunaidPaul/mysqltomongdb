@@ -5,6 +5,10 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var winston = require('winston');
 
+//Global varaibales
+var data = [];
+
+
 // connection to mysql
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -13,48 +17,15 @@ var connection = mysql.createConnection({
   database : 'glucoguide'
 });
 
-connection to mongodb
-var url = 'mongodb://localhost:27017/glucoguide';
-
 var inserIntoCollection = function(db, data, callback){
     var collection = db.collection('user');
-    for(var i=0;i<data.length;i++){
-      collection.insert([data[i]], function(err, result){
+      collection.insert(data, function(err, result){
         assert.equal(err, null);
-        assert.equal(3, result.result.n);
-        assert.equal(3, result.ops.length);  
+        callback(result);
       });
-
     }
-}
 
-// var insertDocuments = function(db, callback) {
-//   // Get the documents collection
-//   var collection = db.collection('user');
-//   // Insert some documents
-//   collection.insert([
-//     {a : 1}, {a : 2}, {a : 3}
-//   ], function(err, result) {
-//     assert.equal(err, null);
-//     assert.equal(3, result.result.n);
-//     assert.equal(3, result.ops.length);
-//     console.log("Inserted 3 documents into the document collection");
-//     callback(result);
-//   });
-// }
 
-// MongoClient.connect(url, function(err, db) {
-//   if(err){
-//     console.log('MongoDB connection failed: ' + err);
-//     return;
-//   }
-//   console.log("MongoDB connection  successful");
-//   var collection = db.collection('user');
-//
-//   insertDocuments(db, function() {
-//     db.close();
-//   });
-// });
 
 connection.connect(function(err) {
   if (err) {
@@ -67,12 +38,26 @@ connection.connect(function(err) {
       console.error('error: ' + err.stack);
       return;
     }
-    var data = [];
     var length = results.length;
     for(var i=0; i<length;i++){
       data.push(results[i])
     }
-    console.log(data);
- });
+    // console.log(data);
+    //connection to mongodb
+    var url = 'mongodb://localhost:27017/glucoguide';
 
+        MongoClient.connect(url, function(err, db) {
+          if(err){
+            console.log('MongoDB connection failed: ' + err);
+            return;
+          }
+          console.log("MongoDB connection  successful");
+          var collection = db.collection('user');
+
+          inserIntoCollection(db,data, function() {
+            db.close();
+          });
+        });
+
+ });
 });
